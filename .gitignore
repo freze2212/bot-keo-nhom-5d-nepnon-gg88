@@ -1,0 +1,22 @@
+# Thông tin nhạy cảm
+.env
+
+# File dữ liệu runtime
+posts.json
+bot.lock
+
+# File log
+*.log
+
+# Thư mục cache, pyc
+__pycache__/
+*.pyc
+venv/
+
+# Bỏ qua file user_session (Telethon session)
+user_session*
+*.session
+*.session-journal
+
+# Bỏ qua thư mục 311
+311/ 
