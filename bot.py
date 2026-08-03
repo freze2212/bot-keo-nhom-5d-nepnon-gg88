@@ -130,9 +130,9 @@ RESULT_SEQUENCE_REPEAT = 1                 # Hô 1 lệnh trong 1 round
 MIN_MESSAGES = 14                          # Tối thiểu 14 tin nhắn trong danh sách nguồn
 
 TZ = timezone(timedelta(hours=7))  # GMT+7 (Việt Nam)
-SCHEDULE_INTERVAL = 20
-SCHEDULE_START_HOUR, SCHEDULE_START_MINUTE = 0, 0
-SCHEDULE_END_HOUR, SCHEDULE_END_MINUTE = 23, 40
+SCHEDULE_INTERVAL = 15
+SCHEDULE_START_HOUR, SCHEDULE_START_MINUTE = 12, 15
+SCHEDULE_END_HOUR, SCHEDULE_END_MINUTE = 0, 0
 
 raw_api_id = (os.getenv('API_ID') or '').strip()
 if raw_api_id and raw_api_id.isdigit():
