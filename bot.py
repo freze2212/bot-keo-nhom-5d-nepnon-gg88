@@ -918,7 +918,8 @@ async def main():
             log(f"Loi khi lay entity tu .env: {e}")
             return
 
-        # await send_now()
+        log("[INFO] Gửi ngay 1 phiên khi vừa bật bot...")
+        await send_now()
         await schedule_loop(entities)
     finally:
         await client.disconnect()
