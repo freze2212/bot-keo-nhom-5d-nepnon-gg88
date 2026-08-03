@@ -567,9 +567,12 @@ async def daily_schedule(client, group):
         # Mảng để lưu các tin nhắn
         messages_to_send = []
         
-        # Lấy các tin nhắn từ cuộc trò chuyện với user
-        async for message in client.iter_messages(user, limit=20):
+        # Lấy các tin nhắn từ cuộc trò chuyện với user (bỏ qua MessageService như ghim tin, đổi ảnh...)
+        async for message in client.iter_messages(user, limit=30):
             try:
+                if type(message).__name__ == 'MessageService' or getattr(message, 'action', None) is not None:
+                    print(f"Bỏ qua tin nhắn hệ thống MessageService ID: {message.id}")
+                    continue
                 print(f"\nĐã tìm thấy tin nhắn ID: {message.id}")
                 print(f"Thời gian gốc: {message.date}")
                 messages_to_send.append(message)
