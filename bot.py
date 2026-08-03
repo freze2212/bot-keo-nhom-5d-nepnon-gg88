@@ -632,29 +632,41 @@ async def daily_schedule(client, group):
             await forward_slot(bet_msg_index, label_text)
             await asyncio.sleep(45)
 
-            # b) Gửi Ảnh Kết Quả (Không kèm caption)
+            # b) Xử lý kết quả (75% Thắng, 15% Thua, 10% Hòa)
             result = random.random()
-            is_win = result < 0.8  # 80% thắng, 20% thua
-
-            if is_cai:
-                result_type = 'wincai' if is_win else 'losecai'
+            if result < 0.75:
+                is_win, is_tie = True, False
+            elif result < 0.90:
+                is_win, is_tie = False, False
             else:
-                result_type = 'wincon' if is_win else 'losecon'
+                is_win, is_tie = False, True
 
-            await send_result_image(group, result_type, caption=None)
-            print(f"2. [Lệnh {repeat_index + 1}] Đã gửi ảnh kết quả loại: {result_type} (không kèm caption)")
-            await asyncio.sleep(10)
-
-            # c) Tin nhắn sau kết quả: Thắng gửi tin thứ 10 (Index 9), Thua gửi tin thứ 11 (Index 10)
-            if is_win:
-                result_msg_index = 9  # Tin thứ 10
-                res_label = f"3. [Lệnh {repeat_index + 1}] Đã gửi tin nhắn THẮNG (Tin thứ 10, index {result_msg_index})"
+            if is_tie:
+                # Nếu HÒA: Gửi ảnh 'tie' kèm text "〰️ HÒA + 0%", KHÔNG gửi tin thứ 10/11
+                await send_result_image(group, 'tie', caption='**〰️ HÒA + 0%**')
+                print(f"2. [Lệnh {repeat_index + 1}] Đã gửi ảnh HÒA kèm text: 〰️ HÒA + 0%")
+                await asyncio.sleep(10)
             else:
-                result_msg_index = 10  # Tin thứ 11
-                res_label = f"3. [Lệnh {repeat_index + 1}] Đã gửi tin nhắn THUA (Tin thứ 11, index {result_msg_index})"
+                # Nếu Thắng / Thua: Gửi ảnh không kèm caption
+                if is_cai:
+                    result_type = 'wincai' if is_win else 'losecai'
+                else:
+                    result_type = 'wincon' if is_win else 'losecon'
 
-            await forward_slot(result_msg_index, res_label)
-            await asyncio.sleep(10)
+                await send_result_image(group, result_type, caption=None)
+                print(f"2. [Lệnh {repeat_index + 1}] Đã gửi ảnh kết quả loại: {result_type} (không kèm caption)")
+                await asyncio.sleep(10)
+
+                # c) Tin nhắn sau kết quả: Thắng gửi tin thứ 10 (Index 9), Thua gửi tin thứ 11 (Index 10)
+                if is_win:
+                    result_msg_index = 9  # Tin thứ 10
+                    res_label = f"3. [Lệnh {repeat_index + 1}] Đã gửi tin nhắn THẮNG (Tin thứ 10, index {result_msg_index})"
+                else:
+                    result_msg_index = 10  # Tin thứ 11
+                    res_label = f"3. [Lệnh {repeat_index + 1}] Đã gửi tin nhắn THUA (Tin thứ 11, index {result_msg_index})"
+
+                await forward_slot(result_msg_index, res_label)
+                await asyncio.sleep(10)
 
         # 3. Gửi nốt 3 tin nhắn kết thúc phiên: Tin 12, 13, 14 (Index 11, 12, 13)
         print("\n=== KẾT THÚC PHIÊN - GỬI 3 TIN NHẮN (TIN 12, 13, 14) ===")
